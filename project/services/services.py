@@ -66,21 +66,10 @@ class DataService:
             print('Data buffering error...')
 
 
-def async_time_it(f: callable) -> callable:
+def time_it(f: callable) -> callable:
     async def wrapper(*args, **kwargs) -> Coroutine:
         start = datetime.datetime.now()
-        result = await f(*args, **kwargs)
+        await f(*args, **kwargs)
         finish = datetime.datetime.now() - start
-        print(f'Function execution time = {finish}')
-        return await result
-    return wrapper
-
-
-def time_it(f: callable) -> callable:
-    def wrapper(*args, **kwargs) -> callable:
-        start = datetime.datetime.now()
-        result = f(*args, **kwargs)
-        finish = datetime.datetime.now() - start
-        print(f'Function execution time = {finish}')
-        return result
+        print(f'"{f.__name__}" function execution time = {finish}')
     return wrapper

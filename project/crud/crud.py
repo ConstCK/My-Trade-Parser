@@ -1,11 +1,10 @@
 import datetime
-from sqlalchemy import select, update, insert
 from sqlalchemy.dialects.postgresql import insert as insert_with_conflict
 
 
 from db.db import async_session, session
 from models.models import TradingResult
-from services.services import async_time_it, time_it
+from services.services import time_it
 
 
 class TradingExchange:
@@ -19,13 +18,11 @@ class TradingExchange:
 
 # Метод для асинхронного добавления данных в БД с обновлением существующих записей!
 
-    # @time_it
+    @time_it
     async def async_create_or_update_data(self, data: list[dict[str, str | int]]) -> None:
         """Метод для создания/обновления данных в таблице с результатами торгов"""
 
-        start = start = datetime.datetime.now()
         print('Starting asynchronous data transfering from local storage to DB...')
-
         async with self.async_session as s:
             for i in data:
                 stmt = insert_with_conflict(TradingResult).values(
@@ -34,17 +31,14 @@ class TradingExchange:
                 await s.execute(stmt)
                 await s.commit()
         print('All data is successfully added to DB...')
-        finish = datetime.datetime.now() - start
-        print(f'Function execution time = {finish}')
 
 
 # Метод для синхронного добавления данных в БД с обновлением существующих записей!
 
-    # @time_it
 
+    @time_it
     async def sync_create_or_update_data(self, data: list[dict[str, str | int]]) -> None:
         """Метод для создания/обновления данных в таблице с результатами торгов"""
-        start = start = datetime.datetime.now()
         print('Starting synchronous data transfering from local storage to DB...')
         with self.sync_session as s:
             for i in data:
@@ -54,5 +48,3 @@ class TradingExchange:
                 s.execute(stmt)
                 s.commit()
         print('All data is successfully added to DB...')
-        finish = datetime.datetime.now() - start
-        print(f'Function execution time = {finish}')

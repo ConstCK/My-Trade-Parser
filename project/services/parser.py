@@ -1,7 +1,5 @@
 import datetime
-import io
 
-import pandas
 import requests
 from bs4 import BeautifulSoup
 
@@ -21,7 +19,7 @@ class Parser:
         page = 0
         data_year = datetime.datetime.now().year
         print('Receiving data files urls...')
-        while limit <= data_year and page < 2:
+        while limit <= data_year:
             page += 1
             r = requests.get(f'{self.url}?page=page-{page}')
             soup = BeautifulSoup(r.content, 'html.parser')

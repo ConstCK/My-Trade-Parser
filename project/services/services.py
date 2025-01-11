@@ -1,14 +1,12 @@
 import datetime
 import io
+from typing import Coroutine
 import pandas
-
-from db.db import async_engine
 
 
 class DataService:
     def __init__(self) -> None:
         self.buffer: list[dict[str, str | int]] = list()
-        self.engine = async_engine
 
     @staticmethod
     def clean_table(objects: pandas.DataFrame, date: datetime.date) -> pandas.DataFrame:
@@ -66,3 +64,23 @@ class DataService:
             self.buffer.extend(buffer_data)
         except Exception:
             print('Data buffering error...')
+
+
+def async_time_it(f: callable) -> callable:
+    async def wrapper(*args, **kwargs) -> Coroutine:
+        start = datetime.datetime.now()
+        result = await f(*args, **kwargs)
+        finish = datetime.datetime.now() - start
+        print(f'Function execution time = {finish}')
+        return await result
+    return wrapper
+
+
+def time_it(f: callable) -> callable:
+    def wrapper(*args, **kwargs) -> callable:
+        start = datetime.datetime.now()
+        result = f(*args, **kwargs)
+        finish = datetime.datetime.now() - start
+        print(f'Function execution time = {finish}')
+        return result
+    return wrapper

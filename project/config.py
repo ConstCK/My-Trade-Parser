@@ -13,5 +13,7 @@ MAIN_URL = 'https://spimex.com/markets/oil_products/trades/results/'
 SELECTED_CLASS = 'accordeon-inner__item-title link xls'
 
 # Маршрут для связи с БД
-ASYNC_DB_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-
+ASYNC_DB_URL = f'postgresql+asyncpg://{DB_USER}:{
+    DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+SYNC_DB_URL = f'postgresql+psycopg2://{DB_USER}:{
+    DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'

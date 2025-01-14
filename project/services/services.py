@@ -51,9 +51,11 @@ class DataService:
     def get_data_from_xls(content: bytes) -> pandas.DataFrame:
         """Получение данных из удаленного excel файла с записью в DataFrame"""
         with io.BytesIO(content) as f:
-            print('Reading from excel file...')
             data = pandas.read_excel(f)
+            print(f'Reading from excel file...{data.shape[0]} rows of data...')
+
         result = pandas.DataFrame(data)
+
         return result
 
     def buffer_data(self, objects: pandas.DataFrame) -> None:
@@ -72,4 +74,5 @@ def time_it(f):
         await f(*args, **kwargs)
         finish = datetime.datetime.now() - start
         print(f'"{f.__name__}" function execution time = {finish}')
+
     return wrapper

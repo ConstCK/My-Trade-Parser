@@ -1,5 +1,6 @@
 import datetime
 
+import httpx
 import requests
 from bs4 import BeautifulSoup
 
@@ -21,7 +22,9 @@ class Parser:
         print('Receiving data files urls...')
         while limit <= data_year:
             page += 1
-            r = requests.get(f'{self.url}?page=page-{page}')
+            # r = requests.get(f'{self.url}?page=page-{page}')
+            async with httpx.AsyncClient() as client:
+                r = await client.get(f'{self.url}?page=page-{page}')
             soup = BeautifulSoup(r.content, 'html.parser')
 
             raw_data = soup.find_all('a',
@@ -44,10 +47,12 @@ class Parser:
                 current_date = datetime.date.fromisoformat(
                     f'{key[:4]}-{key[4:6]}-{key[6:]}')
                 current_url = f'{BASE_URL}{value}'
-                print(f'Adding data to local storage from {current_url}... ')
-                r = requests.get(current_url)
+
+                async with httpx.AsyncClient() as client:
+                    r = await client.get(current_url)
 
                 objects = self.service.get_data_from_xls(r.content)
+                print(f'Adding data to local storage from {current_url}... ')
                 try:
                     objects = self.service.clean_table(objects, current_date)
                     self.service.buffer_data(objects)

@@ -15,8 +15,8 @@ async def main():
     await my_parser.get_xls_urls(2024)
     await my_parser.get_xls_data()
     result = await my_parser.get_all_data()
-    await db_service.async_create_or_update_data(result)
     await db_service.sync_create_or_update_data(result)
+    await db_service.async_create_or_update_data(result)
 
 
 if __name__ == '__main__':

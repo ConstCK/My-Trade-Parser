@@ -1,7 +1,6 @@
 import datetime
 
 import httpx
-import requests
 from bs4 import BeautifulSoup
 
 from config import SELECTED_CLASS, BASE_URL
@@ -22,7 +21,6 @@ class Parser:
         print('Receiving data files urls...')
         while limit <= data_year:
             page += 1
-            # r = requests.get(f'{self.url}?page=page-{page}')
             async with httpx.AsyncClient() as client:
                 r = await client.get(f'{self.url}?page=page-{page}')
             soup = BeautifulSoup(r.content, 'html.parser')

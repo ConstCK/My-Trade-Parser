@@ -18,9 +18,8 @@ engine = create_engine(url=SYNC_DB_URL, future=True, echo=False)
 session = sessionmaker(bind=engine, autoflush=False,
                        autocommit=False, expire_on_commit=False)
 
+
 # Родительский класс для создания таблиц
-
-
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True
 

@@ -37,13 +37,13 @@ class Parser:
 
         return self.xls_urls
 
-    async def get_xls_data(self, url) -> None:
+    async def get_xls_data(self, xls_url) -> None:
         """Получение данных с удаленного excel файла с сохранением в локальный буфер"""
-        key, value = url
+        date, url = xls_url
 
         current_date = datetime.date.fromisoformat(
-            f'{key[:4]}-{key[4:6]}-{key[6:]}')
-        current_url = f'{BASE_URL}{value}'
+            f'{date[:4]}-{date[4:6]}-{date[6:]}')
+        current_url = f'{BASE_URL}{url}'
 
         async with httpx.AsyncClient() as client:
             try:
